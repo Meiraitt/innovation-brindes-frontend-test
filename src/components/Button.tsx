@@ -3,11 +3,11 @@ import type { ButtonHTMLAttributes } from "react";
 type ButtonVariant = "primary" | "secondary" | "ghost";
 type ButtonSize = "sm" | "md" | "lg";
 
-type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   isLoading?: boolean;
-};
+}
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
@@ -24,7 +24,7 @@ const sizeClasses: Record<ButtonSize, string> = {
   lg: "h-12 px-8 text-lg",
 };
 
-export function Button({
+export const Button = ({
   children,
   className,
   disabled,
@@ -33,10 +33,10 @@ export function Button({
   type = "button",
   variant = "primary",
   ...props
-}: ButtonProps) {
+}: ButtonProps) => {
   return (
     <button
-      className={`inline-flex items-center justify-center gap-2 rounded-md font-bold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-60 ${variantClasses[variant]} ${sizeClasses[size]} ${className ?? ""}`}
+      className={`inline-flex cursor-pointer items-center justify-center gap-2 rounded-md font-bold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-60 ${variantClasses[variant]} ${sizeClasses[size]} ${className ?? ""}`}
       disabled={disabled || isLoading}
       type={type}
       {...props}
@@ -50,4 +50,4 @@ export function Button({
       <span>{children}</span>
     </button>
   );
-}
+};

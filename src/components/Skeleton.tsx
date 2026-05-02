@@ -1,8 +1,9 @@
 import type { HTMLAttributes } from "react";
 
-type SkeletonProps = HTMLAttributes<HTMLDivElement>;
-
-export function Skeleton({ className, ...props }: SkeletonProps) {
+export const Skeleton = ({
+  className,
+  ...props
+}: HTMLAttributes<HTMLDivElement>) => {
   return (
     <div
       aria-hidden="true"
@@ -10,4 +11,4 @@ export function Skeleton({ className, ...props }: SkeletonProps) {
       {...props}
     />
   );
-}
+};

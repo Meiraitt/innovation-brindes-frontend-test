@@ -15,7 +15,7 @@ export const Login = () => {
         src={loginBackground}
       />
       <section className="relative z-10 flex w-full flex-col items-center gap-10">
-        <h1 className="text-center text-3xl font-bold text-[#76c900] sm:text-4xl md:text-5xl">
+        <h1 className="text-center text-3xl font-bold text-[#76c900] sm:text-3xl md:text-[2.5rem]">
           Bem-vindo a Innovation Brindes
         </h1>
         <LoginForm />

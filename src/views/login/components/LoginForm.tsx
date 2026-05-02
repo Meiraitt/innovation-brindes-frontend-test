@@ -23,13 +23,13 @@ export const LoginForm = () => {
 
   return (
     <form
-      className="relative flex w-full max-w-150 gap-8 rounded-lg flex-col bg-[#76c900] px-6 py-10 shadow-2xl sm:px-12 md:px-20 md:py-16"
+      className="relative flex min-h-107.5 w-full max-w-175 flex-col justify-end rounded-lg bg-[#76c900] px-6 py-10 shadow-2xl sm:min-h-112.5 sm:px-16 md:px-24"
       noValidate
       onSubmit={handleSubmit}
     >
-      <div className="flex w-full flex-col gap-6">
+      <div className="mx-auto flex w-full max-w-135 flex-col gap-6">
         <Input
-          className="h-14 rounded-full border-0 pl-12 text-lg"
+          className="h-14 rounded-full border-0 pl-14 text-lg sm:h-16"
           error={fieldErrors.user}
           hideErrorMessage
           label="Usuário"
@@ -44,7 +44,7 @@ export const LoginForm = () => {
         />
 
         <Input
-          className="h-14 rounded-full border-0 pl-12 text-lg"
+          className="h-14 rounded-full border-0 pl-14 text-lg sm:h-16"
           error={fieldErrors.password}
           hideErrorMessage
           label="Senha"
@@ -80,18 +80,20 @@ export const LoginForm = () => {
           </a>
         </div>
 
-        {formError ? (
-          <p
-            className="absolute whitespace-nowrap left-1/2 bottom-25 -translate-x-1/2 rounded-md text-center text-sm font-semibold text-red-700 sm:bottom-26 md:bottom-32"
-            role="alert"
-          >
-            {formError}
-          </p>
-        ) : null}
+        <div className="relative h-5">
+          {formError ? (
+            <p
+              className="absolute left-1/2 top-0 -translate-x-1/2 whitespace-nowrap rounded-md text-center text-sm font-semibold text-red-700"
+              role="alert"
+            >
+              {formError}
+            </p>
+          ) : null}
+        </div>
       </div>
 
       <Button
-        className="mx-auto h-14 min-w-48 rounded-full bg-white px-10 text-lg text-zinc-700 hover:bg-zinc-50"
+        className="mx-auto mt-6 h-14 min-w-54 rounded-full bg-white px-10 text-lg text-zinc-700 hover:bg-zinc-50 disabled:bg-white/80 disabled:text-zinc-600 disabled:opacity-100 sm:h-16 sm:min-w-72"
         disabled={hasFieldErrors}
         isLoading={isLoggingIn}
         type="submit"

@@ -17,3 +17,9 @@ export const login = async (credentials: LoginCredentials) => {
 
   return data;
 };
+
+export const logout = async () => {
+  await fetch("/api/auth/logout", {
+    method: "POST",
+  });
+};

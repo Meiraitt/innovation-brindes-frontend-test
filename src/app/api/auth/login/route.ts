@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { AUTH_TOKEN_COOKIE } from "@/constants/auth";
 import type { LoginCredentials, LoginResponse } from "@/types/auth";
 
 const API_URL = process.env.INNOVATION_API_URL;
@@ -84,7 +85,7 @@ export async function POST(request: Request) {
     const response = NextResponse.json(loginResponse);
     const maxAge = credentials.rememberMe ? 60 * 60 * 24 * 30 : undefined; // 30 days
 
-    response.cookies.set("innovation_auth_token", accessToken, {
+    response.cookies.set(AUTH_TOKEN_COOKIE, accessToken, {
       httpOnly: true,
       maxAge,
       path: "/",

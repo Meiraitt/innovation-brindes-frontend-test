@@ -6,7 +6,7 @@ export const Login = () => {
   return (
     <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-zinc-100 px-5 py-10">
       <Image
-        alt=""
+        alt="background image"
         aria-hidden="true"
         className="absolute inset-0 object-cover object-center"
         fill

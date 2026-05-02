@@ -1,5 +1,9 @@
+"use client";
+
 import placeholderImage from "@/assets/images/placeholder.png";
 import { InnovationLogo, MailIcon, PhoneIcon } from "@/assets/icons";
+import { useAuthStore } from "@/stores/authStore";
+import { formatCurrentDate } from "@/utils/formatCurrentDate";
 import Image from "next/image";
 import type { ReactNode } from "react";
 
@@ -35,6 +39,11 @@ const NotificationButton = ({
 };
 
 export const ProductsHeader = () => {
+  const hasHydrated = useAuthStore((state) => state.hasHydrated);
+  const userName = useAuthStore((state) => state.userName);
+  const displayedUserName = userName ?? "Ana Carol Machado";
+  const today = formatCurrentDate();
+
   return (
     <header className="bg-[#76c900] text-white">
       <div className="mx-auto flex min-h-30 w-full max-w-360 flex-col items-center justify-between gap-5 px-5 py-5 min-[920px]:flex-row min-[920px]:gap-6 min-[920px]:px-6 lg:px-10">
@@ -61,7 +70,7 @@ export const ProductsHeader = () => {
           <div className="flex items-center justify-center gap-2 min-[920px]:justify-start min-[920px]:gap-3">
             <div className="rounded-full bg-white p-1.5 shadow-sm">
               <Image
-                alt="Foto de perfil de Ana Carol Machado"
+                alt={`Foto de perfil de ${displayedUserName}`}
                 className="size-11 rounded-full object-cover min-[920px]:size-16"
                 height={72}
                 src={placeholderImage}
@@ -69,11 +78,15 @@ export const ProductsHeader = () => {
               />
             </div>
             <div className="leading-tight">
-              <p className="text-center text-[0.95rem] font-light min-[920px]:text-left min-[920px]:text-3xl">
-                Ana Carol Machado
+              <p className="text-center text-[1.125rem] font-light min-[920px]:text-left min-[920px]:text-3xl">
+                {hasHydrated ? (
+                  displayedUserName
+                ) : (
+                  <span className="inline-block h-5 w-20 animate-pulse rounded bg-white/40 min-[920px]:h-8 min-[920px]:w-40" />
+                )}
               </p>
               <p className="text-center text-xs font-extrabold min-[920px]:text-left min-[920px]:text-xl">
-                Quarta, 23/09/2020
+                {today}
               </p>
             </div>
           </div>

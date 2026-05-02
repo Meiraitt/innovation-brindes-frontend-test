@@ -7,6 +7,7 @@ import {
 } from "react";
 import { useRouter } from "next/navigation";
 import { useLogin } from "@/hooks/useLogin";
+import { useAuthStore } from "@/stores/authStore";
 import {
   type LoginFieldErrors,
   validateLoginFields,
@@ -24,6 +25,7 @@ type LoginFormData = {
 export const useLoginForm = () => {
   const router = useRouter();
   const { isLoggingIn, loginUser } = useLogin();
+  const setUser = useAuthStore((state) => state.setUser);
   const [formData, setFormData] = useState<LoginFormData>({
     password: "",
     rememberMe: true,
@@ -129,7 +131,11 @@ export const useLoginForm = () => {
         user: formData.user.trim(),
       },
       {
-        onSuccess: () => {
+        onSuccess: (loginResponse) => {
+          if (loginResponse.user) {
+            setUser(loginResponse.user);
+          }
+
           router.push("/produtos");
         },
         onError: (loginError) => {

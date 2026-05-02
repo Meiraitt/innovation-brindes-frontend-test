@@ -69,7 +69,6 @@ export async function POST(request: Request) {
     }
 
     const loginResponse: LoginResponse = {
-      accessToken,
       message: data.message,
       status: data.status,
       user: externalUser

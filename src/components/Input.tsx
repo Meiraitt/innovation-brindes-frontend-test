@@ -21,6 +21,7 @@ export const Input = ({
   const inputId = id ?? props.name;
   const errorId = error && inputId ? `${inputId}-error` : undefined;
   const iconClassName = startIcon ? "pl-11" : "";
+  const roundedClassName = className?.includes("rounded-") ? "" : "rounded-md";
   const errorClassName = error
     ? "!border-2 !border-red-500 placeholder:text-red-600 focus:!border-red-500 focus:ring-red-500/30"
     : "";
@@ -45,7 +46,7 @@ export const Input = ({
         <input
           aria-describedby={errorId}
           aria-invalid={Boolean(error)}
-          className={`h-12 w-full rounded-md border border-zinc-300 bg-white px-4 text-base text-zinc-900 shadow-sm placeholder:text-zinc-500 focus:border-[#76c900] focus:outline-none focus:ring-2 focus:ring-[#76c900]/30 ${iconClassName} ${className ?? ""} ${errorClassName}`}
+          className={`h-12 w-full border border-zinc-300 bg-white px-4 text-base text-zinc-900 shadow-sm placeholder:text-zinc-500 focus:border-[#76c900] focus:outline-none focus:ring-2 focus:ring-[#76c900]/30 ${roundedClassName} ${iconClassName} ${className ?? ""} ${errorClassName}`}
           id={inputId}
           {...props}
         />

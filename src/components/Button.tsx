@@ -34,9 +34,11 @@ export const Button = ({
   variant = "primary",
   ...props
 }: ButtonProps) => {
+  const roundedClassName = className?.includes("rounded-") ? "" : "rounded-md";
+
   return (
     <button
-      className={`inline-flex cursor-pointer items-center justify-center gap-2 rounded-md font-bold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-60 ${variantClasses[variant]} ${sizeClasses[size]} ${className ?? ""}`}
+      className={`inline-flex cursor-pointer items-center justify-center gap-2 font-bold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-60 ${roundedClassName} ${variantClasses[variant]} ${sizeClasses[size]} ${className ?? ""}`}
       disabled={disabled || isLoading}
       type={type}
       {...props}

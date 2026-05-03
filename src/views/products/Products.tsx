@@ -10,11 +10,13 @@ const productSkeletons = Array.from({ length: 10 }, (_, index) => index);
 export const Products = () => {
   const {
     canLoadMoreProducts,
+    emptyProductsMessage,
+    favoriteProductCodes,
     handleClearFilters,
     handleLoadMoreProducts,
     handleSearchChange,
     handleSortChange,
-    hasActiveFilters,
+    handleToggleShowOnlyFavorites,
     hasProducts,
     hasVisibleProducts,
     isLoadingMoreProducts,
@@ -24,7 +26,9 @@ export const Products = () => {
     productsError,
     refetchProducts,
     searchTerm,
+    showOnlyFavorites,
     sortOption,
+    toggleFavoriteProduct,
     visibleProducts,
   } = useProductsView();
 
@@ -73,6 +77,18 @@ export const Products = () => {
               />
             </span>
           </label>
+          <Button
+            aria-pressed={showOnlyFavorites}
+            className={`h-12 px-5 ${
+              showOnlyFavorites
+                ? "bg-[#76c900] text-white hover:bg-[#68b500]"
+                : "bg-white text-zinc-800 ring-1 ring-zinc-300 hover:bg-zinc-50"
+            }`}
+            onClick={handleToggleShowOnlyFavorites}
+            type="button"
+          >
+            Favoritos
+          </Button>
         </div>
 
         {isProductsFetching && !isProductsLoading ? (
@@ -110,9 +126,7 @@ export const Products = () => {
       {!isProductsLoading && !isProductsError && !hasProducts ? (
         <section className="mx-auto flex w-full max-w-360 flex-col items-center gap-2 px-6 py-16 text-center">
           <p className="text-lg font-semibold text-zinc-700">
-            {hasActiveFilters
-              ? "Nenhum produto encontrado para a busca."
-              : "Nenhum produto encontrado."}
+            {emptyProductsMessage}
           </p>
         </section>
       ) : null}
@@ -123,7 +137,9 @@ export const Products = () => {
             {visibleProducts.map((product, index) => (
               <ProductCard
                 isPriorityImage={index < 5}
+                isFavorite={favoriteProductCodes.includes(product.code)}
                 key={`${product.code}-${product.reference}`}
+                onToggleFavorite={toggleFavoriteProduct}
                 product={product}
               />
             ))}

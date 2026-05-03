@@ -1,12 +1,14 @@
 import Image from "next/image";
 import placeholderImage from "@/assets/images/placeholder.png";
-import { BoxIcon } from "@/assets/icons";
+import { BoxIcon, HeartIcon } from "@/assets/icons";
 import { Button } from "@/components";
 import type { Product } from "@/types/product";
 import { formatCurrency } from "@/utils/formatCurrency";
 
 type ProductCardProps = {
+  isFavorite: boolean;
   isPriorityImage?: boolean;
+  onToggleFavorite: (productCode: string) => void;
   product: Product;
 };
 
@@ -28,7 +30,9 @@ const colorSwatchesClassNames = [
 ];
 
 export const ProductCard = ({
+  isFavorite,
   isPriorityImage = false,
+  onToggleFavorite,
   product,
 }: ProductCardProps) => {
   const productPrice = Number(product.price);
@@ -49,6 +53,21 @@ export const ProductCard = ({
         <span className="absolute right-0 top-0 z-10 bg-zinc-50 px-1.5 py-0.5 text-sm font-extrabold text-cyan-500">
           EXCLUSIVO!
         </span>
+        <button
+          aria-label={
+            isFavorite
+              ? `Remover ${product.name} dos favoritos`
+              : `Adicionar ${product.name} aos favoritos`
+          }
+          aria-pressed={isFavorite}
+          className={`absolute left-1 top-1 z-10 flex size-8 cursor-pointer items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-zinc-200 transition-colors hover:bg-zinc-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#76c900] ${
+            isFavorite ? "text-[#76c900]" : "text-zinc-400"
+          }`}
+          onClick={() => onToggleFavorite(product.code)}
+          type="button"
+        >
+          <HeartIcon className="size-4.5" isFilled={isFavorite} />
+        </button>
 
         <div className="relative aspect-[0.88] w-full overflow-hidden">
           <Image

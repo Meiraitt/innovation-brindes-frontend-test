@@ -12,11 +12,9 @@ import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { useLogout } from "@/hooks/useLogout";
 import { useProducts } from "@/hooks/useProducts";
 import { ProductRequestError } from "@/services/products";
+import { useFavoritesStore } from "@/stores/favoritesStore";
 import type { ProductFilters } from "@/types/product";
-import {
-  type ProductSortOption,
-  sortProducts,
-} from "../utils/sortProducts";
+import { type ProductSortOption, sortProducts } from "../utils/sortProducts";
 
 const productsPerPage = 10;
 
@@ -35,11 +33,17 @@ export const useProductsView = () => {
   const { logoutUser } = useLogout();
   const loadMoreTimeout = useRef<number | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortOption, setSortOption] =
-    useState<ProductSortOption>("name-asc");
+  const [sortOption, setSortOption] = useState<ProductSortOption>("name-asc");
+  const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
   const [visibleProductsCount, setVisibleProductsCount] =
     useState(productsPerPage);
   const [isLoadingMoreProducts, setIsLoadingMoreProducts] = useState(false);
+  const favoriteProductCodes = useFavoritesStore(
+    (state) => state.favoriteProductCodes,
+  );
+  const toggleFavoriteProduct = useFavoritesStore(
+    (state) => state.toggleFavoriteProduct,
+  );
   const debouncedSearchTerm = useDebouncedValue(searchTerm, 400);
   const debouncedFilters = useMemo(
     () => getProductFilters(debouncedSearchTerm),
@@ -53,9 +57,19 @@ export const useProductsView = () => {
     productsError,
     refetchProducts,
   } = useProducts(debouncedFilters);
+  const filteredProducts = useMemo(() => {
+    if (!showOnlyFavorites) {
+      return products;
+    }
+
+    return products.filter((product) =>
+      favoriteProductCodes.includes(product.code),
+    );
+  }, [favoriteProductCodes, products, showOnlyFavorites]);
+
   const sortedProducts = useMemo(
-    () => sortProducts(products, sortOption),
-    [products, sortOption],
+    () => sortProducts(filteredProducts, sortOption),
+    [filteredProducts, sortOption],
   );
   const visibleProducts = sortedProducts.slice(0, visibleProductsCount);
   const hasProducts = sortedProducts.length > 0;
@@ -64,6 +78,17 @@ export const useProductsView = () => {
   const hasActiveFilters = Boolean(
     debouncedFilters.name.trim() || debouncedFilters.code.trim(),
   );
+  const emptyProductsMessage = (() => {
+    if (showOnlyFavorites) {
+      return "Nenhum favorito encontrado.";
+    }
+
+    if (hasActiveFilters) {
+      return "Nenhum produto encontrado para a busca.";
+    }
+
+    return "Nenhum produto encontrado.";
+  })();
 
   useEffect(() => {
     if (
@@ -97,9 +122,7 @@ export const useProductsView = () => {
     };
   }, []);
 
-  const handleSearchChange: ChangeEventHandler<HTMLInputElement> = (
-    event,
-  ) => {
+  const handleSearchChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     setSearchTerm(event.target.value);
     resetVisibleProducts();
   };
@@ -109,9 +132,17 @@ export const useProductsView = () => {
     resetVisibleProducts();
   };
 
+  const handleToggleShowOnlyFavorites = () => {
+    setShowOnlyFavorites((currentShowOnlyFavorites) => {
+      return !currentShowOnlyFavorites;
+    });
+    resetVisibleProducts();
+  };
+
   const handleClearFilters = () => {
     setSearchTerm("");
     setSortOption("name-asc");
+    setShowOnlyFavorites(false);
     resetVisibleProducts();
   };
 
@@ -127,10 +158,13 @@ export const useProductsView = () => {
 
   return {
     canLoadMoreProducts,
+    emptyProductsMessage,
+    favoriteProductCodes,
     handleClearFilters,
     handleLoadMoreProducts,
     handleSearchChange,
     handleSortChange,
+    handleToggleShowOnlyFavorites,
     hasActiveFilters,
     hasProducts,
     hasVisibleProducts,
@@ -141,7 +175,9 @@ export const useProductsView = () => {
     productsError,
     refetchProducts,
     searchTerm,
+    showOnlyFavorites,
     sortOption,
+    toggleFavoriteProduct,
     visibleProducts,
   };
 };

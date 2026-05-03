@@ -2,7 +2,6 @@
 
 import { Button, Input, Skeleton } from "@/components";
 import { ProductCard } from "./components/ProductCard";
-import { ProductsHeader } from "./components/ProductsHeader";
 import { useProductsView } from "./hooks/useProductsView";
 
 const productSkeletons = Array.from({ length: 10 }, (_, index) => index);
@@ -33,9 +32,7 @@ export const Products = () => {
   } = useProductsView();
 
   return (
-    <main className="min-h-screen bg-white pt-10">
-      <ProductsHeader />
-
+    <main>
       <section className="mx-auto flex w-full max-w-360 flex-col gap-4 px-6 py-6">
         <div className="grid gap-4 md:grid-cols-[1fr_240px_auto] md:items-end">
           <div className="relative">

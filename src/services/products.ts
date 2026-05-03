@@ -1,4 +1,4 @@
-import type { Product } from "@/types/product";
+import type { Product, ProductFilters } from "@/types/product";
 
 export class ProductRequestError extends Error {
   status: number;
@@ -10,9 +10,22 @@ export class ProductRequestError extends Error {
   }
 }
 
-export const listProducts = async () => {
+const hasProductFilters = (filters: ProductFilters) => {
+  return Boolean(filters.name.trim() || filters.code.trim());
+};
+
+export const listProducts = async (filters: ProductFilters) => {
+  const shouldFilterProducts = hasProductFilters(filters);
   const response = await fetch("/api/products", {
-    method: "GET",
+    method: shouldFilterProducts ? "POST" : "GET",
+    ...(shouldFilterProducts
+      ? {
+          body: JSON.stringify(filters),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      : {}),
   });
 
   if (response.status === 401) {

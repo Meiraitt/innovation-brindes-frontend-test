@@ -7,3 +7,8 @@ export type Product = {
   price: string;
   reference: string;
 };
+
+export type ProductFilters = {
+  code: string;
+  name: string;
+};

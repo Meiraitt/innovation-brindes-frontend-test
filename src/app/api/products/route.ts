@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { AUTH_TOKEN_COOKIE } from "@/constants/auth";
-import type { Product } from "@/types/product";
+import type { Product, ProductFilters } from "@/types/product";
 
 const API_URL = process.env.INNOVATION_API_URL;
 const PRODUCTS_URL = `${API_URL}/produtos/listar`;
@@ -16,6 +16,11 @@ const externalFields = {
   reference: "referencia",
 } as const;
 
+const externalFilterFields = {
+  code: "codigo_produto",
+  name: "nome_produto",
+} as const;
+
 type ExternalProduct = {
   [externalFields.categoryCode]: string;
   [externalFields.code]: string;
@@ -27,16 +32,42 @@ type ExternalProduct = {
 };
 
 const normalizeProduct = (product: ExternalProduct): Product => ({
-  categoryCode: product[externalFields.categoryCode],
-  code: product[externalFields.code],
-  description: product[externalFields.description],
-  imageUrl: product[externalFields.imageUrl],
-  name: product[externalFields.name],
-  price: product[externalFields.price],
-  reference: product[externalFields.reference],
+  categoryCode: product[externalFields.categoryCode] ?? "",
+  code: product[externalFields.code] ?? "",
+  description: product[externalFields.description] ?? "",
+  imageUrl: product[externalFields.imageUrl] ?? "",
+  name: product[externalFields.name] ?? "",
+  price: product[externalFields.price] ?? "0",
+  reference: product[externalFields.reference] ?? "",
 });
 
-export const GET = async () => {
+const requestProducts = async (token: string, filters?: ProductFilters) => {
+  const productFilters = filters ?? {
+    code: "",
+    name: "",
+  };
+  const shouldFilterProducts = Boolean(
+    productFilters.name.trim() || productFilters.code.trim(),
+  );
+
+  return fetch(PRODUCTS_URL, {
+    method: shouldFilterProducts ? "POST" : "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    ...(shouldFilterProducts
+      ? {
+          body: JSON.stringify({
+            [externalFilterFields.name]: productFilters.name.trim(),
+            [externalFilterFields.code]: productFilters.code.trim(),
+          }),
+        }
+      : {}),
+  });
+};
+
+const handleProductsRequest = async (filters?: ProductFilters) => {
   const cookieStore = await cookies();
   const token = cookieStore.get(AUTH_TOKEN_COOKIE)?.value;
 
@@ -48,13 +79,7 @@ export const GET = async () => {
   }
 
   try {
-    const apiResponse = await fetch(PRODUCTS_URL, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
+    const apiResponse = await requestProducts(token, filters);
 
     if (apiResponse.status === 401) {
       return NextResponse.json(
@@ -79,4 +104,14 @@ export const GET = async () => {
       { status: 502 },
     );
   }
+};
+
+export const GET = async () => {
+  return handleProductsRequest();
+};
+
+export const POST = async (request: Request) => {
+  const filters = (await request.json()) as ProductFilters;
+
+  return handleProductsRequest(filters);
 };

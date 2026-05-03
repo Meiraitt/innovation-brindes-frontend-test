@@ -1,18 +1,13 @@
 import Image from "next/image";
+import placeholderImage from "@/assets/images/placeholder.png";
 import { BoxIcon } from "@/assets/icons";
 import { Button } from "@/components";
+import type { Product } from "@/types/product";
 import { formatCurrency } from "@/utils/formatCurrency";
 
-type ProductPreview = {
-  code: string;
-  description: string;
-  imageUrl: string;
-  name: string;
-  price: number;
-};
-
-type ProductCardPreviewProps = {
-  product: ProductPreview;
+type ProductCardProps = {
+  isPriorityImage?: boolean;
+  product: Product;
 };
 
 const colorSwatchesClassNames = [
@@ -32,11 +27,19 @@ const colorSwatchesClassNames = [
   "bg-[#2d1b47]",
 ];
 
-export const ProductCardPreview = ({ product }: ProductCardPreviewProps) => {
+export const ProductCard = ({
+  isPriorityImage = false,
+  product,
+}: ProductCardProps) => {
+  const productPrice = Number(product.price);
+  const hasPrice = Number.isFinite(productPrice) && productPrice > 0;
+
   return (
     <article className="flex w-full max-w-56 flex-col items-center">
-      <header className="mb-3 text-center leading-tight">
-        <h2 className="text-xl font-extrabold text-zinc-950">{product.name}</h2>
+      <header className="mb-3 flex min-h-14 flex-col items-center justify-end text-center leading-tight">
+        <h2 className="line-clamp-2 text-xl font-extrabold text-zinc-950">
+          {product.name}
+        </h2>
         <p className="text-base font-medium tracking-[0.12em] text-zinc-900">
           {product.code}
         </p>
@@ -50,10 +53,14 @@ export const ProductCardPreview = ({ product }: ProductCardPreviewProps) => {
         <div className="relative aspect-[0.88] w-full overflow-hidden">
           <Image
             alt={product.name}
-            className="object-contain p-2"
-            fill
+            className="h-full w-full object-contain p-2"
+            fetchPriority={isPriorityImage ? "high" : "auto"}
+            height={420}
+            loading={isPriorityImage ? "eager" : "lazy"}
+            quality={95}
             sizes="224px"
-            src={product.imageUrl}
+            src={product.imageUrl || placeholderImage}
+            width={420}
           />
         </div>
 
@@ -113,15 +120,23 @@ export const ProductCardPreview = ({ product }: ProductCardPreviewProps) => {
 
           <div className="flex flex-col items-end text-left leading-none">
             <div className="text-left">
-              <p className="translate-x-px text-sm leading-none text-zinc-600">
-                a partir de
-              </p>
-              <p className="text-2xl font-extrabold leading-none text-zinc-700">
-                {formatCurrency(product.price)}
-              </p>
+              {hasPrice ? (
+                <>
+                  <p className="translate-x-px text-sm leading-none text-zinc-600">
+                    a partir de
+                  </p>
+                  <p className="text-2xl font-extrabold leading-none text-zinc-700">
+                    {formatCurrency(product.price)}
+                  </p>
+                </>
+              ) : (
+                <p className="text-xl font-extrabold leading-none text-zinc-700">
+                  Sob consulta
+                </p>
+              )}
             </div>
             <p className="text-xs font-bold text-zinc-600">
-              gerado pela melhor oferta
+              {hasPrice ? "gerado pela melhor oferta" : "preco indisponivel"}
             </p>
           </div>
         </div>

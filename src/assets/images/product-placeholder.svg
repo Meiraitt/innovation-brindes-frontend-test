@@ -1,0 +1,36 @@
+<svg width="420" height="420" viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="420" height="420" fill="#FFFFFF"/>
+  <rect x="72" y="56" width="276" height="276" rx="16" fill="#F1F2F4"/>
+  <g
+    color="#C9C9CC"
+    transform="translate(126 112) scale(7)"
+  >
+    <path
+      d="M2.048 18.566A2 2 0 0 0 4 21h16a2 2 0 0 0 1.952-2.434l-2-9A2 2 0 0 0 18 8H6a2 2 0 0 0-1.952 1.566z"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+    />
+    <path
+      d="M8 11V6a4 4 0 0 1 8 0v5"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+    />
+  </g>
+  <text
+    x="210"
+    y="370"
+    text-anchor="middle"
+    fill="#71717A"
+    font-family="Arial, Helvetica, sans-serif"
+    font-size="20"
+    font-weight="700"
+  >
+    Imagem indisponivel
+  </text>
+</svg>

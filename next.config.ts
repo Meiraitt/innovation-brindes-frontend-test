@@ -1,7 +1,24 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    qualities: [75, 95],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "innovationbrindes.com.br",
+      },
+      {
+        protocol: "https",
+        hostname: "apihomolog.innovationbrindes.com.br",
+      },
+      {
+        protocol: "https",
+        hostname: "imgprodutos.s3.us-east-2.amazonaws.com",
+      },
+    ],
+  },
+  output: "standalone",
 };
 
 export default nextConfig;

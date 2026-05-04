@@ -8,6 +8,7 @@ import { formatCurrency } from "@/utils/formatCurrency";
 type ProductCardProps = {
   isFavorite: boolean;
   isPriorityImage?: boolean;
+  onOpenDetails: (product: Product) => void;
   onToggleFavorite: (productCode: string) => void;
   product: Product;
 };
@@ -32,6 +33,7 @@ const colorSwatchesClassNames = [
 export const ProductCard = ({
   isFavorite,
   isPriorityImage = false,
+  onOpenDetails,
   onToggleFavorite,
   product,
 }: ProductCardProps) => {
@@ -137,7 +139,7 @@ export const ProductCard = ({
             </div>
           </div>
 
-          <div className="flex flex-col items-end text-left leading-none">
+          <div className="flex min-h-14 flex-col items-end justify-end text-left leading-none">
             <div className="text-left">
               {hasPrice ? (
                 <>
@@ -149,9 +151,14 @@ export const ProductCard = ({
                   </p>
                 </>
               ) : (
-                <p className="text-xl font-extrabold leading-none text-zinc-700">
-                  Sob consulta
-                </p>
+                <>
+                  <p className="invisible text-sm leading-none">
+                    a partir de
+                  </p>
+                  <p className="text-xl font-extrabold leading-none text-zinc-700">
+                    Sob consulta
+                  </p>
+                </>
               )}
             </div>
             <p className="text-xs font-bold text-zinc-600">
@@ -163,7 +170,9 @@ export const ProductCard = ({
 
       <Button
         className="mt-3 h-8 w-full rounded-none px-4 text-base font-bold"
+        onClick={() => onOpenDetails(product)}
         size="sm"
+        type="button"
       >
         CONFIRA
       </Button>

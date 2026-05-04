@@ -1,10 +1,16 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { Button, Input, Skeleton } from "@/components";
 import { ProductCard } from "./components/ProductCard";
 import { useProductsView } from "./hooks/useProductsView";
 
 const productSkeletons = Array.from({ length: 10 }, (_, index) => index);
+const ProductDetailModal = dynamic(() =>
+  import("./components/ProductDetailModal").then(
+    (module) => module.ProductDetailModal,
+  ),
+);
 
 export const Products = () => {
   const {
@@ -13,6 +19,8 @@ export const Products = () => {
     favoriteProductCodes,
     handleClearFilters,
     handleLoadMoreProducts,
+    handleOpenProductDetails,
+    handleProductDetailsOpenChange,
     handleSearchChange,
     handleSortChange,
     handleToggleShowOnlyFavorites,
@@ -25,6 +33,8 @@ export const Products = () => {
     productsError,
     refetchProducts,
     searchTerm,
+    selectedProduct,
+    shouldShowProductDetails,
     showOnlyFavorites,
     sortOption,
     toggleFavoriteProduct,
@@ -136,6 +146,7 @@ export const Products = () => {
                 isPriorityImage={index < 5}
                 isFavorite={favoriteProductCodes.includes(product.code)}
                 key={`${product.code}-${product.reference}`}
+                onOpenDetails={handleOpenProductDetails}
                 onToggleFavorite={toggleFavoriteProduct}
                 product={product}
               />
@@ -153,6 +164,18 @@ export const Products = () => {
           ) : null}
         </section>
       ) : null}
+
+      <ProductDetailModal
+        isFavorite={
+          selectedProduct
+            ? favoriteProductCodes.includes(selectedProduct.code)
+            : false
+        }
+        isOpen={shouldShowProductDetails}
+        onOpenChange={handleProductDetailsOpenChange}
+        onToggleFavorite={toggleFavoriteProduct}
+        product={selectedProduct}
+      />
     </main>
   );
 };

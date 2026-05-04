@@ -13,7 +13,7 @@ import { useLogout } from "@/hooks/useLogout";
 import { useProducts } from "@/hooks/useProducts";
 import { ProductRequestError } from "@/services/products";
 import { useFavoritesStore } from "@/stores/favoritesStore";
-import type { ProductFilters } from "@/types/product";
+import type { Product, ProductFilters } from "@/types/product";
 import { type ProductSortOption, sortProducts } from "../utils/sortProducts";
 
 const productsPerPage = 10;
@@ -35,6 +35,7 @@ export const useProductsView = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOption, setSortOption] = useState<ProductSortOption>("name-asc");
   const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [visibleProductsCount, setVisibleProductsCount] =
     useState(productsPerPage);
   const [isLoadingMoreProducts, setIsLoadingMoreProducts] = useState(false);
@@ -156,12 +157,24 @@ export const useProductsView = () => {
     }, 300);
   };
 
+  const handleOpenProductDetails = (product: Product) => {
+    setSelectedProduct(product);
+  };
+
+  const handleProductDetailsOpenChange = (isOpen: boolean) => {
+    if (!isOpen) {
+      setSelectedProduct(null);
+    }
+  };
+
   return {
     canLoadMoreProducts,
     emptyProductsMessage,
     favoriteProductCodes,
     handleClearFilters,
     handleLoadMoreProducts,
+    handleOpenProductDetails,
+    handleProductDetailsOpenChange,
     handleSearchChange,
     handleSortChange,
     handleToggleShowOnlyFavorites,
@@ -175,6 +188,8 @@ export const useProductsView = () => {
     productsError,
     refetchProducts,
     searchTerm,
+    selectedProduct,
+    shouldShowProductDetails: Boolean(selectedProduct),
     showOnlyFavorites,
     sortOption,
     toggleFavoriteProduct,

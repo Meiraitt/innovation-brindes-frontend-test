@@ -1,7 +1,8 @@
 "use client";
 
+import innovationLogoImage from "@/assets/images/innovation-logo-horizontal.png";
 import placeholderImage from "@/assets/images/placeholder.png";
-import { InnovationLogo, MailIcon, PhoneIcon } from "@/assets/icons";
+import { MailIcon, PhoneIcon } from "@/assets/icons";
 import { useAuthStore } from "@/stores/authStore";
 import { formatCurrentDate } from "@/utils/formatCurrentDate";
 import Image from "next/image";
@@ -47,7 +48,14 @@ export const ProductsHeader = () => {
   return (
     <header className="bg-[#76c900] text-white">
       <div className="mx-auto flex min-h-30 w-full max-w-360 flex-col items-center justify-between gap-5 px-5 py-5 min-[920px]:flex-row min-[920px]:gap-6 min-[920px]:px-6 lg:px-10">
-        <InnovationLogo />
+        <Image
+          alt="Innovation Brindes"
+          className="h-18 w-auto object-contain sm:h-20 min-[920px]:h-25"
+          height={120}
+          priority
+          src={innovationLogoImage}
+          width={304}
+        />
 
         <div className="flex w-full flex-col-reverse items-center gap-4 min-[920px]:w-auto min-[920px]:flex-row min-[920px]:justify-end min-[920px]:gap-5">
           <div className="flex items-center gap-5">

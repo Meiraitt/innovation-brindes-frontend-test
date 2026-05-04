@@ -8,7 +8,7 @@ export const Login = () => {
       <Image
         alt="background image"
         aria-hidden="true"
-        className="absolute inset-0 object-cover object-center"
+        className="absolute inset-0 object-cover object-right"
         fill
         priority
         sizes="100vw"

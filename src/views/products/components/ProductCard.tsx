@@ -1,5 +1,5 @@
 import Image from "next/image";
-import placeholderImage from "@/assets/images/placeholder.png";
+import productPlaceholderImage from "@/assets/images/product-placeholder.svg";
 import { BoxIcon, HeartIcon } from "@/assets/icons";
 import { Button } from "@/components";
 import type { Product } from "@/types/product";
@@ -80,7 +80,7 @@ export const ProductCard = ({
             loading={isPriorityImage ? "eager" : "lazy"}
             quality={95}
             sizes="224px"
-            src={product.imageUrl || placeholderImage}
+            src={product.imageUrl || productPlaceholderImage}
             width={420}
           />
         </div>
@@ -152,9 +152,7 @@ export const ProductCard = ({
                 </>
               ) : (
                 <>
-                  <p className="invisible text-sm leading-none">
-                    a partir de
-                  </p>
+                  <p className="invisible text-sm leading-none">a partir de</p>
                   <p className="text-xl font-extrabold leading-none text-zinc-700">
                     Sob consulta
                   </p>

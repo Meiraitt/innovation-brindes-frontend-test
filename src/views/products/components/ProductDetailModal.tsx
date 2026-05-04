@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import placeholderImage from "@/assets/images/placeholder.png";
+import productPlaceholderImage from "@/assets/images/product-placeholder.svg";
 import { HeartIcon } from "@/assets/icons";
 import { Button, Modal } from "@/components";
 import type { Product } from "@/types/product";
@@ -58,7 +58,7 @@ export const ProductDetailModal = ({
             className="object-contain p-4"
             fill
             sizes="240px"
-            src={product.imageUrl || placeholderImage}
+            src={product.imageUrl || productPlaceholderImage}
           />
         </div>
 

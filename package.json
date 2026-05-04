@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "postbuild": "mkdir -p .next/standalone/.next .next/standalone/public && cp -R .next/static .next/standalone/.next/ && cp -R public/. .next/standalone/public/",
+    "start": "node .next/standalone/server.js",
     "lint": "eslint",
     "test": "vitest run",
     "test:e2e": "playwright test"
